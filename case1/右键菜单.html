@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<style>
+ul,li,h2 {
+	margin: 0;
+	padding: 0;
+}
+ul {
+	width: 150px; 
+	background: #96f6e7; 
+	border: 1px solid #888;
+}
+li {
+	position: relative;
+	border:1px solid #96f6e7 ; 
+	list-style: none; 
+} 
+h2 {
+	font-size: 12px; 
+	font-weight: normal; 
+	height: 30px; 
+	line-height: 30px; 
+	width: 133px; 
+	padding-left: 15px;
+}
+span {
+	display: block; 
+	width: 0; 
+	height: 0; 
+	border-width: 4px;
+	border-style: solid; 
+	border-color: #96f6e7 #96f6e7 #96f6e7 #333; 
+	font-size: 0; 
+	line-height: 0; 
+	float: right; 
+	margin-right: 15px;
+	margin-top: 10px;
+}
+#wrap {
+	position: relative;
+	width: 153px;
+}
+.li ul,.move ul,.select ul{
+	position: absolute;
+	left: 142px;
+	top: 0;
+	display: none;
+}
+.move {
+	border:1px solid #99F;
+	background: #51f1d9;
+}
+.sanjiao {
+	border-color: #51f1d9 #51f1d9 #51f1d9 #333; 
+	left: 0;
+	top: 0;
+}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<script>
+var data = [
+	{
+		name : "显示卡属性"
+	},
+	{
+		name : "查看",
+			child: [
+				{name : "大图标"},
+				{name : "中等图标"},
+				{name : "小图标"},
+				{name : "自动排列图标"},
+				{name : "将图标与网格对齐"},
+				{name : "显示桌面图标"},
+				{name : "显示桌面小工具"}
+			]
+	},
+	{
+		name : "排序方式",
+			child: [
+				{name : "名称"},
+				{name : "项目类型"},
+				{name : "类型"},
+				{name : "修改日期"},
+			]
+	},
+	{
+		name : "刷新"
+	},
+	{
+		name : "图形选项",
+			child: [
+				{name : "屏面适应",
+					child: [
+						{name : "保持显示缩放比"}
+					]
+				},
+				{name : "快捷键",
+					child: [
+						{name : "启用"},
+						{name : "禁用"}
+					]
+				},
+				{name : "系统拖盘图标",
+					child: [
+						{name : "启用"},
+						{name : "禁用"}
+					]
+				},
+				{name : "气球通知",
+					child: [
+						{name : "图形属性通知",
+							child: [
+								{name: "启用"},
+								{name: "禁用"}
+							]
+						},
+						{name : "最佳分辨率通知",
+							child: [
+								{name: "启用"},
+								{name: "禁用"}
+							]
+						}
+					]
+				},
+				{name : "旋转",
+					child: [
+						{name : "旋转至正常"},
+						{name : "旋转至90度"},
+						{name : "旋转至180度"},
+						{name : "旋转至270度"},
+					]
+				},
+			]
+		},
+	{
+		name : "个性化"
+	}
+]
+//console.log(data)
+
+//右键生成结构
+var wrap = document.getElementById('wrap');
+var inner = "";
+document.oncontextmenu = function(e,obj){
+	inner = "";
+	var x = e.pageX;
+	var y = e.pageY;
+	wrap.style.left = x + "px";
+	wrap.style.top = y + "px";
+	createsome(data);
+	wrap.innerHTML = inner;
+	var box = wrap.children[0];
+	box.className = "box";
+	var li = box.children;
+	for(var i = 0; i < li.length; i++) {
+	 	li[i].className = "li";
+	}//让最开始的ul能显示出来
+	var h2s = document.getElementsByTagName('h2');
+	var lis = document.getElementsByTagName('li');
+	for(var i = 0; i < lis.length; i++) {
+		lis[i].index = i;
+		lis[i].onmouseover = function() {
+			this.className = "move";
+			var showme = h2s[this.index].nextElementSibling;
+			if(showme) {
+				this.children[0].children[0].className = "sanjiao";
+				showme.style.display = "block";
+			}
+		}
+		lis[i].onmouseout = function() {
+			this.className = "stop";
+			var showme = h2s[this.index].nextElementSibling;
+			if(showme) {
+				this.children[0].children[0].className = "";
+				showme.style.display = "none";
+			}
+		}
+	}
+	return false;
+}
+
+//点击清空页面
+document.onclick = function() {
+	wrap.innerHTML = "";
+	console.log(1)
+}
+
+//生成结构
+function createsome(obj) {
+	inner += "<ul>";
+	for(var i = 0; i < obj.length; i++) {
+		inner += "<li>";
+		if(obj[i].child) {		
+			inner += "<h2>" + obj[i].name + "<span>" + "</span>" + "</h2>";
+			createsome(obj[i].child)
+		}else {
+			inner += "<h2>" + obj[i].name + "</h2>";
+		}
+		inner +="</li>";
+	}
+	inner += "</ul>";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<style>
+#wrap {
+	width: 260px;
+	font-size: 0;
+	margin: 0 auto;
+}
+ul,li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+ul {
+	width: 200px;
+	display: none;
+	border: 1px solid #000;
+	padding-top: 3px;
+}
+li {
+	width: 200px;
+	border: 1px solid #000;
+	border-left: none;
+	border-right: none;
+	margin-bottom: 3px;
+	font: 20px/20px "宋体";
+}
+a {
+	display: inline-block;
+	width: 100%;
+	font: 20px/20px "宋体";
+	text-decoration: none;
+	color: #000;
+}
+#text {
+	width: 200px;
+	height: 20px;
+	margin: 0;
+	outline: none;
+	border: 1px solid #f4e3b2;
+	border-radius: 3px;
+}
+#btn {
+	width: 40px;
+	height: 23px;
+	padding: 0;
+	margin: 0;
+	outline: none;
+	background: #f4e3b2;
+}
+.active {
+	background: #f4e3b2;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+	<input type="text" id="text"/>
+	<input type="button"  value="搜索" id="btn"/>
+		<ul id="list">
+			<li><a href="javascript:;">《史记》</a></li>
+			<li><a href="javascript:;">《资治通鉴》</a></li>
+			<li><a href="javascript:;">《大国崛起》</a></li>
+			<li><a href="javascript:;">《全球通史》</a></li>
+			<li><a href="javascript:;">《蒙古颠覆世界史》</a></li>
+			<li><a href="javascript:;">《宽容》</a></li>
+			<li><a href="javascript:;">《唐明皇》</a></li>
+			<li><a href="javascript:;">《分水岭》</a></li>
+			<li><a href="javascript:;">《西班牙旅行笔记》</a></li>
+			<li><a href="javascript:;">《人类简史》</a></li>
+		</ul>
+</div>
+<script src="miaov.js"></script>
+<script>
+var text = document.getElementById('text');
+var list = document.getElementById('list');
+var btn = document.getElementById('btn');
+var lisa = document.getElementsByTagName('a');
+var lis = list.children;
+var nub = 0;
+var nubs = -1;
+text.onfocus = function (){
+	list.style.display = "block";
+}
+for( var i = 0; i < lis.length; i++) {
+	lis[i].index = i;
+	lis[i].onclick = function (){
+		nubs = this.index;
+		console.log(nubs)
+		if(nub != 17) {
+			for( var j = 0; j < lis.length; j++) {
+				lis[j].className = "";
+			}
+			text.value = lisa[this.index].innerHTML;
+			this.className = "active";
+			list.style.display = "none";
+		}else {
+			text.value += lisa[this.index].innerHTML;
+			this.className = "active";
+		}
+	}
+}
+document.onkeydown = function (e){
+	var code = e.keyCode;
+	switch(code) {
+		case 40:
+			nubs++;
+			if( nubs > 9) nubs = 0;
+			for(var i = 0; i < lis.length; i++) {
+				lis[i].className = "";
+				lis[nubs].className = "active";
+			}
+		break;
+		case 38:
+			nubs--;
+			if(nubs < 0) nubs = 9;
+			for(var i = 0; i < lis.length; i++) {
+				lis[i].className = "";
+				lis[nubs].className = "active";
+			}
+		break;
+	}
+	if(nubs == -1) {
+		text.value ="";
+	}else if(code == 13 && e.ctrlKey) {
+		text.value += lisa[nubs].innerHTML;
+		nubs.className = "active";
+	}else if(code == 13) {
+		text.value = lisa[nubs].innerHTML;
+	}
+	if (code == 17) nub = code;
+}	
+document.onkeyup = function (e){
+	nub = 0;
+}
+btn.onclick = function() {
+	text.value = "";
+}
+</script>
+</body>
+</html>

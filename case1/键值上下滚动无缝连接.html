@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<style>
+#wrap {
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	position: relative;
+	font-size: 0;
+	overflow: hidden;
+}
+#box1 {
+	width: 198px;
+	height: 798px;
+	border: 1px solid #000;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#box2 {
+	width: 800px;
+	height: 198px;
+	border: 1px solid #000;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+img {
+	width: 199px;
+	height: 199px;
+}
+input {
+	position: absolute;
+	z-index: 1000000000;
+	outline: none;
+}
+.show {
+	z-index: 100000;
+}
+#box {
+	position: relative;
+	width: 202px;
+	height: 202px;
+	border: 1px solid #000;
+	margin: 0 auto;
+	margin-top: 100px;
+}
+#left {
+	width: 20px;
+	height: 200px;
+	left: -20px;
+	top: 0px;
+	border: none;
+	background: #f2f2f2;
+}
+#up {
+	width: 240px;
+	height: 20px;
+	left: -20px;
+	top: -20px;
+	border: none;
+	background: #f2f2f2;
+}
+#right {
+	width: 20px;
+	height: 200px;
+	right: -20px;
+	top: 0px;
+	border: none;
+	background: #f2f2f2;
+}
+#bottom {
+	left: -20px;
+	bottom: -20px;
+	width: 240px;
+	height: 20px;
+	border: none;
+	background: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<div id="box">
+	<div id="wrap">
+		<div id="box1">
+			<img src="imgs/img1.gif"/>
+			<img src="imgs/img2.gif"/>
+			<img src="imgs/img3.gif"/>
+			<img src="imgs/img1.gif"/>
+		</div>
+		<div id="box2">
+			<img src="imgs/img1.gif"/>
+			<img src="imgs/img2.gif"/>
+			<img src="imgs/img3.gif"/>
+			<img src="imgs/img1.gif"/>
+		</div>
+	</div>
+	<input type="button" value="<<" id="left">
+	<input type="button" value="︽" id="up">
+	<input type="button" value=">>" id="right">
+	<input type="button" value="︾" id="bottom">
+</div>
+<script src="miaov.js"></script>
+<script>
+var btn = document.getElementsByTagName('input');
+var box1 = document.getElementById('box1');
+var box2 = document.getElementById('box2');
+var wrap = document.getElementById('wrap');
+var nub = 0;
+var nub1 = 0;
+var w = wrap.clientWidth;
+var h = wrap.clientHeight;
+btn[0].onclick = function () {
+	up();
+	left();
+}
+btn[1].onclick = function () {
+	left();
+	up();
+}
+btn[2].onclick = function () {
+	bottom();
+	right();
+}
+btn[3].onclick = function () {
+	right();
+	bottom();
+}
+window.onkeydown = function(e) {
+	var code = e.keyCode;
+	switch(code) { 
+		case 37:
+			up();
+			left(); 
+			break;
+		case 38:
+			left(); 
+			up();			
+			break;
+		case 39:
+			bottom();
+			right(); 
+			break;
+		case 40:
+			right(); 
+			bottom(); 
+			break;
+	}
+}
+function left() {
+	nub++;
+	if(nub > 3) {
+		nub = 1;
+		box2.style.left = 0;
+		mTween(box2,{left: -nub * wrap.clientWidth},300,"linear")
+	}else {
+		mTween(box2,{left: -nub * wrap.clientWidth},300,"linear")
+	}
+	box1.className = "";
+	box2.className = "show";	
+}
+function up() {
+	nub1++;
+	if(nub1 > 3) {
+		nub1 = 1;
+		box1.style.top = 0;
+		mTween(box1,{top: -nub1 * wrap.clientWidth},300,"linear")
+	}else {
+		mTween(box1,{top: -nub1 * wrap.clientWidth},300,"linear")
+	}
+	box2.className = "";
+	box1.className = "show";
+}
+function right() {
+	nub--;
+	if(nub < 0) {
+		nub = 2;
+		box2.style.left = -3*wrap.clientWidth + "px";
+		mTween(box2,{left: -nub * wrap.clientWidth},300,"linear")
+	}
+	box1.className = "";
+	box2.className = "show";
+	mTween(box2,{left: -nub * wrap.clientWidth},300,"linear")
+}
+function bottom() {
+	nub1--;
+	if(nub1 < 0) {
+		nub1 = 2;
+		box1.style.top = -3*wrap.clientHeight + "px";
+		mTween(box1,{top: -nub1 * wrap.clientWidth},300,"linear")
+	}else {
+		mTween(box1,{top: -nub1 * wrap.clientWidth},300,"linear")
+	}
+	box2.className = "";
+	box1.className = "show";
+}
+</script>
+</body>
+</html>

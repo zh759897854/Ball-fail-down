@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<style>
+body {
+	margin: 0;
+}
+div {
+	width: 915px;
+	height: 465px;
+	border: 1px solid pink;
+	font-size: 0;
+	padding: 5px;
+	padding-left: 0;
+	padding-top: 0;
+	background: #e2e243;
+	position: relative;
+}
+img {
+	width: 300px;
+	height: 150px;
+	vertical-align: top;
+	margin: 0;
+	margin-left: 5px;
+	margin-top: 5px;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+.upimg {
+	z-index: 1000;
+}
+.downimg {
+	z-index: 1;
+}
+input {
+	width: 100px;
+	margin-left: 30%;
+}
+</style>
+</head>
+<body>
+<div>
+	<img src="imgs/img1.gif"/>
+	<img src="imgs/img2.gif"/>
+	<img src="imgs/img3.gif"/>
+	<img src="imgs/img4.gif"/>
+	<img src="imgs/img5.gif"/>
+	<img src="imgs/img6.gif"/>
+	<img src="imgs/img7.gif"/>
+	<img src="imgs/img8.gif"/>
+	<img src="imgs/img9.gif"/>
+</div>
+<input type="button" value="随机排序"/>
+<script src="miaov.js"></script>
+<script>
+var imgs = document.getElementsByTagName('img');
+var btn = document.getElementsByTagName('input')[0];
+var arr = [];
+var nub = 0;
+//--------------------------------------------------------------------------------//
+for(var i = 0; i < imgs.length; i++) {
+	imgs[i].index = i;
+	arr.push(imgs[i].offsetLeft,imgs[i].offsetTop);//获取每一个图片的位置 并且存进arr中
+	imgs[i].onmousedown = function (e) {
+		function ab() {
+			arr = [];
+			arr.push(imgs[i].offsetLeft,imgs[i].offsetTop);
+			imgs[i].style.position = "absolute";
+			var a = arr.slice(2*i,2*i+2);
+			imgs[i].style.left = a[0] -5 + "px";
+			imgs[i].style.top = a[1] -5 + "px";
+			imgs[i].className = "downimg";
+			css3d(imgs[i],"scale",.99)
+		}//每一次点击记录每一个imgs所在的位置
+		function ac() {
+			imgs[i].style.position = "absolute";
+			var a = arr.slice(2*i,2*i+2);
+			imgs[i].style.left = a[0] -5 + "px";
+			imgs[i].style.top = a[1] -5 + "px";
+			imgs[i].className = "downimg";
+			css3d(imgs[i],"scale",.99)
+		}//当没有点击btn,每一次点击记录每一个imgs所在的位置
+		for(var i = 0; i < imgs.length; i++) {
+			if(nub == 0) {
+				ac();
+			}else {
+				ab();
+			}	
+		}
+		var l = this.offsetLeft;
+		var t = this.offsetTop; 
+		var x = e.pageX - l;
+		var y = e.pageY - t;
+		var ml = 0;
+		var mt = 0;
+		this.className = "upimg";
+		this.onmousemove = function(e) {
+			this.style.left = e.pageX - x + "px";
+			this.style.top = e.pageY - y + "px";
+			ml = e.pageX - x + this.clientWidth/2;
+			mt = e.pageY - y + this.clientHeight/2;
+		}
+		var arrreplace = [];
+		var last = [];
+		this.onmouseup = function(e) {
+			for(var i = 0; i < imgs.length; i++) {
+				imgs[i].onmousemove = null;
+				css3d(imgs[i],"scale",1)
+				arr.push(imgs[i].offsetLeft,imgs[i].offsetTop);
+			}
+			//console.log(ml,mt)
+			var wd = imgs[0].clientWidth/2;
+			var ht = imgs[0].clientHeight/2;
+			var roundx = 0;
+			var roundy = 0;
+			for(var i = 0; i < imgs.length; i++) { 
+				roundx = imgs[i].offsetLeft + wd;
+				roundy = imgs[i].offsetTop + ht;
+				arrreplace.push([ml-roundx,mt-roundy]);	
+			}
+			for(var i = 0; i < arrreplace.length; i++) {
+				last.push((Math.abs(arrreplace[i][0]) + Math.abs(arrreplace[i][1])));
+				//console.log(last)
+			}
+			last.splice(this.index,1)
+			function min() {
+				var minnub = 0;
+				for(var i = 1; i <last.length; i++) {
+					if(last[i] < last[minnub]) minnub = i;
+				}
+				return minnub;
+			}
+			var lastnub = min();
+			console.log(last,lastnub)
+			this.style.left = imgs[lastnub].style.left;
+			this.style.top = imgs[lastnub].style.top;
+			imgs[lastnub].style.left = l -5 + "px";
+			imgs[lastnub].style.top = t -5  + "px";
+			// this.style.left = l -5 + "px";
+			// this.style.top = t -5  + "px";
+		}
+		return false;
+	}
+}
+//--------------------------------------------------------------------------------//
+(btn.onclick = function() {
+	var arrs = [];
+	for(var i = 0; i < imgs.length; i++) {
+	arrs.push([imgs[i].offsetLeft,imgs[i].offsetTop]);//获取每一个图片的位置 并且存进arr中
+}
+console.log(arrs)
+	nub++;
+	function randomnub(a, b) {
+		return Math.random()>.5 ? -1:1;//用Math.random() 函数生成0~1之间的随机数与0.5比较，返回-1或1
+	}
+	var arr1 = [0,1,2,3,4,5,6,7,8];
+	arr1.sort(randomnub);
+	for(var i = 0; i < imgs.length; i++) {
+		//var a = arr.slice(2*i,2*i+2);//每次去前俩数
+		imgs[i].style.position = "absolute";
+		mTween(imgs[arr1[i]],{left: arrs[i][0]-5,top: arrs[i][1]-5},300,"linear");//改变每一个imgs的位置
+	}
+})();
+</script>
+</body>
+</html>

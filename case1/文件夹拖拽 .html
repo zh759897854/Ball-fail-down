@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<style>
+#box {
+	width: 65px;
+	height: 50px;
+	padding: 10px;
+	padding-bottom: 25px;
+	border-radius: 3px;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+img {
+	width: 65px;
+	height: 50px;
+}
+input {
+	width: 65px;
+	height:12px;
+	outline: none;
+	border: none;
+	background: #fff;
+	text-overflow: ellipsis;
+}
+.mo {
+	position: absolute;
+	width: 65px;
+	height: 50px;
+	padding: 10px;
+	padding-bottom: 25px;
+	border-radius: 3px;
+	left: 0px;
+	top: 0px;
+}
+</style>
+</head>
+<body>
+<div id="box">
+	<img src="img/wenjian.png"/>
+	<input type="text" value="新建文件夹" id="input">
+</div>
+<script>
+var box = document.getElementById('box');
+var input = document.getElementById('input');
+var body = document.body;
+box.addEventListener('mousedown',fn,false);
+function fn(e) {
+	box.style.background = "#f1e1e1";
+	input.style.background = "#f1e1e1";
+	var mo = document.createElement("div");
+	mo.className = "mo";
+	mo.innerHTML = box.innerHTML;
+	body.appendChild(mo);
+	mo.style.left = box.style.left;
+	mo.style.top = box.style.top;
+	mo.style.background = "#f1e1e1";
+	box.style.display = "none";
+	mo.onmousedown = function(e) {
+		var inp = mo.getElementsByTagName('input')[0];
+		box.style.display = "block";
+		var x = e.pageX - mo.offsetLeft;
+		var y = e.pageY - mo.offsetTop;
+		mo.style.background = "";
+		inp.style.background = "";
+		document.onmousemove = function(e) {
+			mo.style.left = e.pageX- x  + "px";
+			mo.style.top = e.pageY- y  + "px";
+			return false;
+		}
+		document.onmouseup = function(e) {
+			document.onmousemove = null;
+			box.style.left = mo.style.left;
+			box.style.top = mo.style.top;
+			inp.style.background = "#f1e1e1";
+			box.style.display = "block";
+		}
+	}
+}
+</script>
+</body>
+</html>

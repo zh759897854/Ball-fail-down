@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+body{
+  margin:0;
+}
+img{
+  border:none;
+  vertical-align:top;
+}
+ul{
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+h2{
+  margin:0;
+}
+a{
+  text-decoration: none;
+  color:blue;
+}
+#wrap{
+  width:900px;
+  /*background: blue;*/
+  margin:30px auto;
+}
+#left{
+  float:left;
+  width:200px;
+  
+  padding-top:20px;
+}
+#leftL{
+  margin-top:40px;
+
+}
+.show{
+  background: skyblue;
+}
+#leftL li{
+    width:180px;
+    height:40px;
+   /* background: red;*/
+    font:16px/40px "宋体";
+    text-align:center;
+
+}
+#right{
+  width:650px;
+  float:left;
+  padding-left:40px;
+  padding-top:60px;
+  border-left:1px solid #ccc;
+}
+.box{
+  margin-top:40px;
+}
+.box2{
+  font:10px/30px "宋体";
+  margin-top:20px;
+  color:#666;
+}
+.strong{
+  margin-right:50px;
+}
+footer{
+  margin:0;
+  width:650px;
+  height:36px;
+  margin-top:30px;
+  background: #ccc;
+  font:15px/36px "宋体";
+  color:#555;  
+}
+footer>span:nth-of-type(1){
+  margin-left:30px;
+  margin-right:30px;
+}
+/*footer>span:nth-of-type(3){
+  margin-left:20px;
+  margin-right:20px;
+}*/
+
+footer>span:nth-of-type(5){
+  float:right;
+  margin-right:30px;
+}
+.bg{
+  background: #8a9fec;
+}
+.diva{
+  margin-top:20px;
+  margin-bottom:20px;
+  font:20px/30px "宋体";
+  color:blue;
+}
+</style>
+<script src="js/data.js"></script>
+<script>
+
+  		window.onload=function(){
+  			
+        var leftL = document.getElementById('leftL');
+        var right = document.getElementById('right');
+        var t=0
+        var kk=0
+        creat(aData.sh.img,aData.sh.text)
+
+        for(var i=0;i<leftL.children.length;i++){
+
+          leftL.children[i].onmouseover=function(){
+
+              leftL.children[0].className=""
+              leftL.children[1].className=""
+              this.className="show"
+
+          }
+          leftL.children[i].index=i
+          leftL.children[i].onclick=function(){
+
+              leftL.children[0].className=""
+              leftL.children[1].className=""
+             
+              this.className="show"
+              if(this.index==0){
+                right.innerHTML=""
+                t=0
+                kk=0
+                creat(aData.sh.img,aData.sh.text)
+              }else{
+                right.innerHTML=""
+                 t=1
+                 kk=1
+                creat(aData.xy.img,aData.xy.text)
+              }
+              leftL.children[0].onmouseover=null
+              leftL.children[1].onmouseover=null
+          }
+        }
+        
+      function creat(xx,yy){
+          var div1 = document.createElement("div")
+        var div2 = document.createElement("div")
+        var img1 = document.createElement("img")
+        img1.src = xx
+        div1.appendChild(img1)
+        right.appendChild(div1)
+
+        var sec =document.createElement("section")
+        window.location.hash="data=1"
+         var o=0
+         fn()
+
+         window.onhashchange=function(){
+          var hash = window.location.hash.split('=')[1];
+          
+            if(hash==1){
+              o=0
+              sec.innerHTML=""
+              fn()
+            }else if(hash==2){
+              o=3
+              sec.innerHTML=""
+              fn()
+            }else if(hash==3){
+              o=6
+              sec.innerHTML=""
+              fn()
+            }
+
+         }
+       
+      function fn(){
+        var t = o+3
+        if(o==6){
+          t=7
+        }
+
+        for(var n=o;n<t;n++){
+
+        var div3= document.createElement("div")
+        var div4=document.createElement("div")
+        var strong1 = document.createElement("strong")
+        var strong2 = document.createElement("strong")
+        // var span = document.createElement("span")
+        var div5 = document.createElement("div")
+        var a = document.createElement("a")
+        // var node =document.createTextNode("link")
+        // a.appendChild(node)
+        a.setAttribute("href","#")
+        a.innerHTML="[查看详情]"
+        strong1.innerHTML="★ 职位需求 : "+yy[n].zw;
+        strong2.innerHTML="需求人数: "+yy[n].rs+" 名";
+
+        for(var i=0;i<yy[n].info[0].l.length;i++){
+          
+          div5.innerHTML+=yy[n].info[0].l[i]
+          if(div5.innerHTML.length>80){
+            div5.innerHTML=div5.innerHTML.substring(0,80)+"…"
+          }
+         
+        }
+        div5.appendChild(a)
+        
+        // span.innerHTML=aData.sh.text[0].sj;  未写时间
+        strong1.className="strong"
+        div5.className="box2"
+        div4.appendChild(strong1)
+        div4.appendChild(strong2)
+        // div4.appendChild(span)
+
+        div3.appendChild(div4)
+        div3.appendChild(div5)
+        div3.className="box"
+    
+        sec.appendChild(div3)
+
+       a.onclick=function(){
+        // document.cookie="0="+kk;
+        window.location.search="kk"
+       console.log(window.location.search)
+        window.open("具体信息.html");
+        
+       }
+
+
+        }
+      }
+        
+        right.appendChild(sec)
+
+        var footer = document.createElement("footer")
+        var k=1
+        for(var m=0;m<5;m++){
+           var span = document.createElement("span")
+           footer.appendChild(span)
+        }
+        var spans = footer.getElementsByTagName("span")
+         
+
+         spans[1].className="bg"
+         spans[0].innerHTML="< Prev"
+         spans[1].innerHTML="1"
+         spans[2].innerHTML="2"
+         spans[3].innerHTML="3"
+         spans[4].innerHTML="Next >"
+         right.appendChild(footer)
+
+         for(var i =1;i<4;i++){
+            spans[i].style.cssText="display:inline-block;width:30px;height:28px;text-align:center;margin-right:10px;margin-top:4px;font:15px/28px '宋体';"
+            spans[i].index=i
+            spans[i].onclick=function(){
+              for(var i =1;i<4;i++){
+                 spans[i].className=""
+              }
+
+              this.className="bg"
+              k=this.index
+               window.location.hash="data="+k
+            }
+
+         }
+         spans[0].onclick=function(){
+            if(k<2){
+              return 
+            }
+            for(var i =1;i<4;i++){
+                 spans[i].className=""
+            }
+
+            k--
+            window.location.hash="data="+k
+            spans[k].className="bg"
+         }
+          spans[4].onclick=function(){
+            if(t==1 && k>1){
+              return
+            }else if(k>2){
+              return 
+            }
+            
+            for(var i =1;i<4;i++){
+                 spans[i].className=""
+            }
+            k++
+            window.location.hash="data="+k
+            spans[k].className="bg"
+         }
+
+         if(t==1){
+          spans[3].style.display="none"
+          }
+        }
+        
+
+            
+    }		  
+</script>
+</head>
+<body>
+<div id="wrap">
+    <div id="left">
+      <h2>招贤纳士</h2>
+      <ul id="leftL">
+        <li class="show">社会招聘</li>
+        <li>校园招聘</li>
+      </ul>
+    </div>
+    <div id="right">
+
+    </div>
+</div>
+</body>
+</html>
